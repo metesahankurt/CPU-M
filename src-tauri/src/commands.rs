@@ -17,3 +17,8 @@ where
 pub async fn get_platform_info() -> Result<PlatformInfo, String> {
     blocking(platform::detect).await
 }
+
+#[tauri::command]
+pub async fn get_system_info() -> Result<crate::models::system::SystemInfo, String> {
+    blocking(crate::services::system::collect).await
+}

@@ -2,13 +2,13 @@ import { useTranslation } from "react-i18next";
 import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { OverviewPage } from "@/pages/overview";
 import { PlaceholderPage } from "@/pages/placeholder";
 import { SettingsPage } from "@/pages/settings";
 import { WelcomePage } from "@/pages/welcome";
 import { ThemeProvider } from "@/providers/theme-provider";
 
 const placeholderKeys = [
-  "overview",
   "cpu",
   "gpu",
   "memory",
@@ -37,6 +37,7 @@ function App() {
                 element={<Navigate replace={true} to="/app/overview" />}
                 index={true}
               />
+              <Route element={<OverviewPage />} path="overview" />
               {placeholderKeys.map((key) => (
                 <Route
                   element={<PlaceholderPage title={t(key)} />}
