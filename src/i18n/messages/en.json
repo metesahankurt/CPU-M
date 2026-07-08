@@ -1,0 +1,77 @@
+{
+  "Common": {
+    "unavailable": "Not accessible on this system",
+    "requiresAdmin": "Requires administrator privileges",
+    "copied": "Copied",
+    "copy": "Copy",
+    "yes": "Yes",
+    "no": "No",
+    "loading": "Loading...",
+    "units": {
+      "days": "d",
+      "hours": "h",
+      "minutes": "min"
+    }
+  },
+  "Navigation": {
+    "groups": {
+      "system": "System",
+      "hardware": "Hardware",
+      "status": "Status"
+    },
+    "overview": "Overview",
+    "cpu": "Processor",
+    "gpu": "Graphics",
+    "memory": "Memory",
+    "storage": "Storage",
+    "displays": "Displays",
+    "network": "Network",
+    "battery": "Battery",
+    "mainboard": "Mainboard",
+    "security": "Security",
+    "license": "License",
+    "sensors": "Sensors",
+    "report": "System Report",
+    "settings": "Settings"
+  },
+  "Welcome": {
+    "title": "CPU-M",
+    "tagline": "Detailed System Information",
+    "description": "CPU-M presents detailed hardware information about your processor, graphics, memory, storage, network, battery and more in a single modern interface.",
+    "features": {
+      "hardware": "Hardware Analysis",
+      "hardwareDesc": "CPU, GPU, RAM, disk and display details",
+      "realtime": "Real-Time",
+      "realtimeDesc": "Live usage and sensor monitoring",
+      "privacy": "Fully Local",
+      "privacyDesc": "Your data never leaves your device"
+    },
+    "detectedOs": "Detected operating system",
+    "analyzing": "Analyzing system...",
+    "ready": "System ready",
+    "start": "View System Information"
+  },
+  "ModeCard": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "Settings": {
+    "title": "Settings",
+    "appearance": "Appearance",
+    "appearanceDesc": "Customize how the app looks",
+    "mode": "Mode",
+    "modeDesc": "Light, dark or system theme",
+    "colorTheme": "Color Theme",
+    "colorThemeDesc": "Choose from 41 color schemes",
+    "language": "Language",
+    "languageDesc": "Application language",
+    "turkish": "Turkish",
+    "english": "English",
+    "refresh": "Refresh",
+    "refreshDesc": "How often live data updates",
+    "refreshInterval": "Refresh interval",
+    "searchTheme": "Search themes...",
+    "noThemeFound": "No theme found"
+  }
+}

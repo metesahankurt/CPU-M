@@ -1,0 +1,77 @@
+{
+  "Common": {
+    "unavailable": "Bu sistemde erişilemiyor",
+    "requiresAdmin": "Yönetici yetkisi gerektiriyor",
+    "copied": "Kopyalandı",
+    "copy": "Kopyala",
+    "yes": "Evet",
+    "no": "Hayır",
+    "loading": "Yükleniyor...",
+    "units": {
+      "days": "gün",
+      "hours": "saat",
+      "minutes": "dakika"
+    }
+  },
+  "Navigation": {
+    "groups": {
+      "system": "Sistem",
+      "hardware": "Donanım",
+      "status": "Durum"
+    },
+    "overview": "Genel Bakış",
+    "cpu": "İşlemci",
+    "gpu": "Ekran Kartı",
+    "memory": "Bellek",
+    "storage": "Depolama",
+    "displays": "Ekranlar",
+    "network": "Ağ",
+    "battery": "Batarya",
+    "mainboard": "Anakart",
+    "security": "Güvenlik",
+    "license": "Lisans",
+    "sensors": "Sensörler",
+    "report": "Sistem Raporu",
+    "settings": "Ayarlar"
+  },
+  "Welcome": {
+    "title": "CPU-M",
+    "tagline": "Detaylı Sistem Bilgileri",
+    "description": "CPU-M; işlemci, ekran kartı, bellek, depolama, ağ, batarya ve daha fazlası hakkında ayrıntılı donanım bilgilerini tek bir modern arayüzde sunar.",
+    "features": {
+      "hardware": "Donanım Analizi",
+      "hardwareDesc": "CPU, GPU, RAM, disk ve ekran ayrıntıları",
+      "realtime": "Gerçek Zamanlı",
+      "realtimeDesc": "Canlı kullanım ve sensör takibi",
+      "privacy": "Tamamen Yerel",
+      "privacyDesc": "Veriler cihazınızdan asla çıkmaz"
+    },
+    "detectedOs": "Algılanan işletim sistemi",
+    "analyzing": "Sistem analiz ediliyor...",
+    "ready": "Sistem hazır",
+    "start": "Sistem Bilgilerini Görüntüle"
+  },
+  "ModeCard": {
+    "light": "Aydınlık",
+    "dark": "Karanlık",
+    "system": "Sistem"
+  },
+  "Settings": {
+    "title": "Ayarlar",
+    "appearance": "Görünüm",
+    "appearanceDesc": "Uygulamanın görünümünü özelleştirin",
+    "mode": "Mod",
+    "modeDesc": "Aydınlık, karanlık veya sistem teması",
+    "colorTheme": "Renk Teması",
+    "colorThemeDesc": "41 farklı renk şeması arasından seçim yapın",
+    "language": "Dil",
+    "languageDesc": "Uygulama dili",
+    "turkish": "Türkçe",
+    "english": "İngilizce",
+    "refresh": "Yenileme",
+    "refreshDesc": "Canlı verilerin güncellenme sıklığı",
+    "refreshInterval": "Yenileme aralığı",
+    "searchTheme": "Tema ara...",
+    "noThemeFound": "Tema bulunamadı"
+  }
+}

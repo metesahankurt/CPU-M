@@ -4,7 +4,31 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tauri + React + Typescript</title>
+    <title>CPU-M</title>
+    <script>
+      // Apply persisted color theme and dark mode before first paint (FOUC guard).
+      (function () {
+        try {
+          var settings = JSON.parse(
+            localStorage.getItem("cpum-settings") || "{}",
+          );
+          var colorTheme = settings.state && settings.state.colorTheme;
+          if (colorTheme && colorTheme !== "default") {
+            document.documentElement.setAttribute("data-theme", colorTheme);
+          }
+          var mode = localStorage.getItem("theme");
+          var dark =
+            mode === "dark" ||
+            ((mode === "system" || !mode) &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches);
+          if (dark) {
+            document.documentElement.classList.add("dark");
+          }
+        } catch (e) {
+          /* first run: defaults apply */
+        }
+      })();
+    </script>
   </head>
 
   <body>

@@ -1,25 +1,55 @@
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { useTranslation } from "react-i18next";
+import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
+import { DashboardLayout } from "@/components/layout/dashboard-layout";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { PlaceholderPage } from "@/pages/placeholder";
+import { SettingsPage } from "@/pages/settings";
+import { WelcomePage } from "@/pages/welcome";
+import { ThemeProvider } from "@/providers/theme-provider";
+
+const placeholderKeys = [
+  "overview",
+  "cpu",
+  "gpu",
+  "memory",
+  "storage",
+  "displays",
+  "network",
+  "battery",
+  "mainboard",
+  "security",
+  "license",
+  "sensors",
+  "report",
+] as const;
 
 function App() {
+  const { t } = useTranslation("Navigation");
+
   return (
-    <main className="flex min-h-screen items-center justify-center bg-background">
-      <Card className="w-96">
-        <CardHeader>
-          <CardTitle>CPU-M</CardTitle>
-          <CardDescription>Design system smoke test</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Button>It works</Button>
-        </CardContent>
-      </Card>
-    </main>
+    <ThemeProvider>
+      <TooltipProvider>
+        <HashRouter>
+          <Routes>
+            <Route element={<WelcomePage />} path="/" />
+            <Route element={<DashboardLayout />} path="/app">
+              <Route
+                element={<Navigate replace={true} to="/app/overview" />}
+                index={true}
+              />
+              {placeholderKeys.map((key) => (
+                <Route
+                  element={<PlaceholderPage title={t(key)} />}
+                  key={key}
+                  path={key}
+                />
+              ))}
+              <Route element={<SettingsPage />} path="settings" />
+            </Route>
+          </Routes>
+        </HashRouter>
+      </TooltipProvider>
+    </ThemeProvider>
   );
 }
 
