@@ -52,17 +52,6 @@ fn username() -> Option<String> {
         .ok()
 }
 
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn collects_without_panicking() {
-        let info = super::collect();
-        let json = serde_json::to_string_pretty(&info).expect("serializes");
-        println!("{json}");
-        assert!(json.contains("computerName"));
-    }
-}
-
 fn locale() -> Option<String> {
     #[cfg(target_os = "macos")]
     {
@@ -77,5 +66,16 @@ fn locale() -> Option<String> {
     #[cfg(not(target_os = "macos"))]
     {
         std::env::var("LANG").ok()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn collects_without_panicking() {
+        let info = super::collect();
+        let json = serde_json::to_string_pretty(&info).expect("serializes");
+        println!("{json}");
+        assert!(json.contains("computerName"));
     }
 }

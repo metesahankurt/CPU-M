@@ -64,7 +64,7 @@ pub fn collect_dynamic() -> CpuDynamicInfo {
     // sysinfo reports 0 for frequency on platforms where it cannot read it.
     let freq = sys.cpus().first().map(|c| c.frequency()).unwrap_or(0);
 
-    let mut info = CpuDynamicInfo {
+    let info = CpuDynamicInfo {
         global_usage_percent: Field::Ok(global),
         per_core_usage_percent: per_core,
         current_frequency_mhz: if freq > 0 {
@@ -78,9 +78,15 @@ pub fn collect_dynamic() -> CpuDynamicInfo {
     drop(sys);
 
     #[cfg(windows)]
-    windows::fill_dynamic(&mut info);
-
-    info
+    {
+        let mut info = info;
+        windows::fill_dynamic(&mut info);
+        info
+    }
+    #[cfg(not(windows))]
+    {
+        info
+    }
 }
 
 #[cfg(test)]

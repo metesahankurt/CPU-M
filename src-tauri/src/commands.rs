@@ -64,3 +64,36 @@ pub async fn get_network_info() -> Result<crate::models::network::NetworkInfo, S
 pub async fn get_battery_info() -> Result<crate::models::battery::BatteryInfo, String> {
     blocking(crate::services::battery::collect).await
 }
+
+#[tauri::command]
+pub async fn get_mainboard_info() -> Result<crate::models::mainboard::MainboardInfo, String> {
+    blocking(crate::services::mainboard::collect).await
+}
+
+#[tauri::command]
+pub async fn get_security_info() -> Result<crate::models::security::SecurityInfo, String> {
+    blocking(crate::services::security::collect).await
+}
+
+#[tauri::command]
+pub async fn get_license_info() -> Result<crate::models::license::LicenseInfo, String> {
+    blocking(crate::services::license::collect).await
+}
+
+#[tauri::command]
+pub async fn get_sensors_info() -> Result<crate::models::sensors::SensorsInfo, String> {
+    blocking(crate::services::sensors::collect).await
+}
+
+#[tauri::command]
+pub async fn generate_system_report(
+    app: tauri::AppHandle,
+    mask_sensitive: bool,
+) -> Result<crate::models::report::SystemReport, String> {
+    blocking(move || crate::services::report::generate(&app, mask_sensitive)).await
+}
+
+#[tauri::command]
+pub async fn write_report_file(path: String, contents: String) -> Result<(), String> {
+    blocking(move || crate::services::report::write_file(&path, &contents)).await?
+}

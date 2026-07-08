@@ -2,9 +2,14 @@ pub mod battery;
 pub mod cpu;
 pub mod display;
 pub mod gpu;
+pub mod license;
+pub mod mainboard;
 pub mod memory;
 pub mod network;
 pub mod platform;
+pub mod report;
+pub mod security;
+pub mod sensors;
 pub mod storage;
 pub mod system;
 

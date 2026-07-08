@@ -1,6 +1,5 @@
 use crate::models::storage::PhysicalDisk;
 use crate::models::Field;
-use crate::util::macos::run_cmd;
 use serde_json::Value;
 use std::process::Command;
 

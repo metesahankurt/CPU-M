@@ -115,3 +115,68 @@ export interface BatteryInfo {
   acAdapterWatts: Field<number>;
   lowPowerMode: Field<boolean>;
 }
+
+export interface MainboardInfo {
+  boardManufacturer: Field<string>;
+  boardModel: Field<string>;
+  boardSerialNumber: Field<string>;
+  biosVendor: Field<string>;
+  biosVersion: Field<string>;
+  biosDate: Field<string>;
+  firmwareVersion: Field<string>;
+  bootMode: Field<string>;
+  uefi: Field<boolean>;
+  secureBoot: Field<boolean>;
+  secureBootLevel: Field<string>;
+  tpmPresent: Field<boolean>;
+  tpmVersion: Field<string>;
+}
+
+export interface SecurityInfo {
+  firewallEnabled: Field<boolean>;
+  antivirusStatus: Field<string>;
+  defenderStatus: Field<string>;
+  secureBootEnabled: Field<boolean>;
+  tpmPresent: Field<boolean>;
+  tpmVersion: Field<string>;
+  bitlockerStatus: Field<string>;
+  filevaultEnabled: Field<boolean>;
+  sipEnabled: Field<boolean>;
+  gatekeeperEnabled: Field<boolean>;
+  systemIntegrity: Field<string>;
+  osUpdateStatus: Field<string>;
+}
+
+export interface LicenseInfo {
+  productName: Field<string>;
+  edition: Field<string>;
+  activationStatus: Field<string>;
+  licenseChannel: Field<string>;
+  partialProductKey: Field<string>;
+  licenseStatus: Field<string>;
+  authenticitySummary: Field<string>;
+  appleModelRecognized: Field<boolean>;
+  officialOsBuild: Field<boolean>;
+  integrityChecks: string[];
+  hackintoshIndicators: string[];
+}
+
+export interface SensorReading {
+  name: string;
+  category: string;
+  value: Field<number>;
+  unit: string;
+  detail: Field<string>;
+}
+
+export interface SensorsInfo {
+  readings: SensorReading[];
+  thermalState: Field<string>;
+  fanCount: Field<number>;
+  notes: string[];
+}
+
+export interface SystemReport {
+  json: string;
+  text: string;
+}

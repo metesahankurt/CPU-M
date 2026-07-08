@@ -21,7 +21,13 @@ pub fn run() {
             commands::get_storage_info,
             commands::get_display_info,
             commands::get_network_info,
-            commands::get_battery_info
+            commands::get_battery_info,
+            commands::get_mainboard_info,
+            commands::get_security_info,
+            commands::get_license_info,
+            commands::get_sensors_info,
+            commands::generate_system_report,
+            commands::write_report_file
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
