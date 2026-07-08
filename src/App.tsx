@@ -3,17 +3,17 @@ import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { CpuPage } from "@/pages/cpu";
+import { DisplaysPage } from "@/pages/displays";
+import { GpuPage } from "@/pages/gpu";
 import { MemoryPage } from "@/pages/memory";
 import { OverviewPage } from "@/pages/overview";
 import { PlaceholderPage } from "@/pages/placeholder";
 import { SettingsPage } from "@/pages/settings";
+import { StoragePage } from "@/pages/storage";
 import { WelcomePage } from "@/pages/welcome";
 import { ThemeProvider } from "@/providers/theme-provider";
 
 const placeholderKeys = [
-  "gpu",
-  "storage",
-  "displays",
   "network",
   "battery",
   "mainboard",
@@ -39,7 +39,10 @@ function App() {
               />
               <Route element={<OverviewPage />} path="overview" />
               <Route element={<CpuPage />} path="cpu" />
+              <Route element={<GpuPage />} path="gpu" />
               <Route element={<MemoryPage />} path="memory" />
+              <Route element={<StoragePage />} path="storage" />
+              <Route element={<DisplaysPage />} path="displays" />
               {placeholderKeys.map((key) => (
                 <Route
                   element={<PlaceholderPage title={t(key)} />}

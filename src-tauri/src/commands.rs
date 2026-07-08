@@ -37,3 +37,20 @@ pub async fn get_cpu_dynamic() -> Result<crate::models::cpu::CpuDynamicInfo, Str
 pub async fn get_memory_info() -> Result<crate::models::memory::MemoryInfo, String> {
     blocking(crate::services::memory::collect).await
 }
+
+#[tauri::command]
+pub async fn get_gpu_info() -> Result<Vec<crate::models::gpu::GpuInfo>, String> {
+    blocking(crate::services::gpu::collect).await
+}
+
+#[tauri::command]
+pub async fn get_storage_info() -> Result<crate::models::storage::StorageInfo, String> {
+    blocking(crate::services::storage::collect).await
+}
+
+#[tauri::command]
+pub async fn get_display_info(
+    app: tauri::AppHandle,
+) -> Result<Vec<crate::models::display::DisplayInfo>, String> {
+    blocking(move || crate::services::display::collect(&app)).await
+}
