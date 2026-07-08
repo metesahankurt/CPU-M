@@ -19,7 +19,9 @@ pub fn run() {
             commands::get_memory_info,
             commands::get_gpu_info,
             commands::get_storage_info,
-            commands::get_display_info
+            commands::get_display_info,
+            commands::get_network_info,
+            commands::get_battery_info
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

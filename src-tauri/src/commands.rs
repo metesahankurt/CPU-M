@@ -54,3 +54,13 @@ pub async fn get_display_info(
 ) -> Result<Vec<crate::models::display::DisplayInfo>, String> {
     blocking(move || crate::services::display::collect(&app)).await
 }
+
+#[tauri::command]
+pub async fn get_network_info() -> Result<crate::models::network::NetworkInfo, String> {
+    blocking(crate::services::network::collect).await
+}
+
+#[tauri::command]
+pub async fn get_battery_info() -> Result<crate::models::battery::BatteryInfo, String> {
+    blocking(crate::services::battery::collect).await
+}
