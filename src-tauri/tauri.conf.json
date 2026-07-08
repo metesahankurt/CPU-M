@@ -34,5 +34,16 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ]
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEQzMDAzOTRENkZBOERGRkUKUldUKzM2aHZUVGtBMDV5N1lsUzBjKyt4N25SK3NBKzRLangzclVuY3dvT1BNYkFDQXF1b0oxcTkK",
+      "endpoints": [
+        "https://github.com/metesahankurt/CPU-M/releases/latest/download/latest.json"
+      ],
+      "windows": {
+        "installMode": "passive"
+      }
+    }
   }
 }

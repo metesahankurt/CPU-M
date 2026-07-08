@@ -1,6 +1,8 @@
 import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
+import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { useAutoUpdater } from "@/hooks/use-auto-updater";
 import { BatteryPage } from "@/pages/battery";
 import { CpuPage } from "@/pages/cpu";
 import { DisplaysPage } from "@/pages/displays";
@@ -19,6 +21,8 @@ import { WelcomePage } from "@/pages/welcome";
 import { ThemeProvider } from "@/providers/theme-provider";
 
 function App() {
+  useAutoUpdater();
+
   return (
     <ThemeProvider>
       <TooltipProvider>
@@ -47,6 +51,7 @@ function App() {
             </Route>
           </Routes>
         </HashRouter>
+        <Toaster />
       </TooltipProvider>
     </ThemeProvider>
   );

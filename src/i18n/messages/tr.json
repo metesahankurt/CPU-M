@@ -308,6 +308,17 @@
     "refreshDesc": "Canlı verilerin güncellenme sıklığı",
     "refreshInterval": "Yenileme aralığı",
     "searchTheme": "Tema ara...",
-    "noThemeFound": "Tema bulunamadı"
+    "noThemeFound": "Tema bulunamadı",
+    "updates": "Güncellemeler",
+    "updatesDesc": "Yeni sürüm varsa otomatik olarak indirilir, kurulur ve uygulama yeniden başlatılır",
+    "checkUpdates": "Güncellemeyi kontrol et",
+    "updateIdle": "Uygulama açılışta güncellemeleri otomatik kontrol eder.",
+    "updateChecking": "Güncelleme kontrol ediliyor...",
+    "updateNone": "Yeni güncelleme yok.",
+    "updateAvailable": "Yeni sürüm bulundu: {{version}}. İndiriliyor...",
+    "updateDownloading": "Güncelleme indiriliyor...",
+    "updateInstalling": "Güncelleme kuruluyor...",
+    "updateInstalled": "Güncelleme kuruldu. Uygulama yeniden başlatılıyor...",
+    "updateError": "Güncelleme kontrol edilemedi."
   }
 }

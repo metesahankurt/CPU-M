@@ -36,7 +36,7 @@ pub fn collect() -> SecurityInfo {
                     .map(|v| format!("Signed System Volume: {v}"))
             })
             .into(),
-        os_update_status: software_update_status().into(),
+        os_update_status: Field::Unavailable,
     }
 }
 
@@ -61,18 +61,6 @@ fn firewall_enabled() -> Option<bool> {
         &["--getglobalstate"],
     )?;
     Some(output.contains("enabled") || output.contains("State = 1"))
-}
-
-fn software_update_status() -> Option<String> {
-    let output = run_cmd("softwareupdate", &["--list"])?;
-    let lower = output.to_lowercase();
-    if lower.contains("no new software available") {
-        Some("Up to date".to_string())
-    } else if lower.contains("software update found") || lower.contains('*') {
-        Some("Updates available".to_string())
-    } else {
-        Some(output.lines().next().unwrap_or("Unknown").trim().to_string())
-    }
 }
 
 fn profiler_first(data_type: &str) -> Option<Value> {

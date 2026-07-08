@@ -1,4 +1,12 @@
-import { Check, Laptop, Moon, Paintbrush, RefreshCw, Sun } from "lucide-react";
+import {
+  Check,
+  Download,
+  Laptop,
+  Moon,
+  Paintbrush,
+  RefreshCw,
+  Sun,
+} from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { InfoCard } from "@/components/shared/info-card";
@@ -14,6 +22,7 @@ import {
 } from "@/components/ui/select";
 import { themes } from "@/config/themes";
 import { useThemeTransition } from "@/hooks/use-theme-transition";
+import { checkAndInstallUpdate } from "@/lib/updater";
 import { cn } from "@/lib/utils";
 import { useSettingsStore } from "@/stores/settings-store";
 import type { Language } from "@/stores/settings-store";
@@ -101,6 +110,63 @@ function ThemeGrid() {
   );
 }
 
+function UpdatesCard() {
+  const { t } = useTranslation("Settings");
+  const [busy, setBusy] = useState(false);
+  const [status, setStatus] = useState(t("updateIdle"));
+  const [progress, setProgress] = useState<number | null>(null);
+
+  const handleCheck = async () => {
+    setBusy(true);
+    setProgress(null);
+    await checkAndInstallUpdate({
+      onStatus: (next, detail) => {
+        if (next === "checking") {
+          setStatus(t("updateChecking"));
+        } else if (next === "not-available") {
+          setStatus(t("updateNone"));
+        } else if (next === "available") {
+          setStatus(t("updateAvailable", { version: detail }));
+        } else if (next === "downloading") {
+          setStatus(t("updateDownloading"));
+        } else if (next === "installing") {
+          setStatus(t("updateInstalling"));
+        } else if (next === "installed") {
+          setStatus(t("updateInstalled"));
+        } else {
+          setStatus(t("updateError"));
+        }
+      },
+      onProgress: (downloaded, total) => {
+        if (total && total > 0) {
+          setProgress(Math.round((downloaded / total) * 100));
+        }
+      },
+    });
+    setBusy(false);
+  };
+
+  return (
+    <InfoCard description={t("updatesDesc")} icon={Download} title={t("updates")}>
+      <div className="flex flex-col gap-3 py-2">
+        <div className="text-muted-foreground text-sm">
+          {status}
+          {progress !== null ? ` (${progress}%)` : ""}
+        </div>
+        <Button
+          className="w-fit gap-2"
+          disabled={busy}
+          onClick={handleCheck}
+          variant="outline"
+        >
+          <RefreshCw className={cn("size-4", busy && "animate-spin")} />
+          {t("checkUpdates")}
+        </Button>
+      </div>
+    </InfoCard>
+  );
+}
+
 export function SettingsPage() {
   const { t, i18n } = useTranslation("Settings");
   const { language, setLanguage, refreshIntervalMs, setRefreshIntervalMs } =
@@ -173,6 +239,8 @@ export function SettingsPage() {
           </Select>
         </div>
       </InfoCard>
+
+      <UpdatesCard />
     </div>
   );
 }

@@ -308,6 +308,17 @@
     "refreshDesc": "How often live data updates",
     "refreshInterval": "Refresh interval",
     "searchTheme": "Search themes...",
-    "noThemeFound": "No theme found"
+    "noThemeFound": "No theme found",
+    "updates": "Updates",
+    "updatesDesc": "When a new release is available, it is downloaded, installed, and the app restarts automatically",
+    "checkUpdates": "Check for updates",
+    "updateIdle": "The app checks for updates automatically on launch.",
+    "updateChecking": "Checking for updates...",
+    "updateNone": "No update available.",
+    "updateAvailable": "New release found: {{version}}. Downloading...",
+    "updateDownloading": "Downloading update...",
+    "updateInstalling": "Installing update...",
+    "updateInstalled": "Update installed. Restarting...",
+    "updateError": "Could not check for updates."
   }
 }
