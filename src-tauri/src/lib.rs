@@ -13,7 +13,10 @@ pub fn run() {
         .plugin(tauri_plugin_clipboard_manager::init())
         .invoke_handler(tauri::generate_handler![
             commands::get_platform_info,
-            commands::get_system_info
+            commands::get_system_info,
+            commands::get_cpu_static,
+            commands::get_cpu_dynamic,
+            commands::get_memory_info
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

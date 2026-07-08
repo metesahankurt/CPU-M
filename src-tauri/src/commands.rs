@@ -22,3 +22,18 @@ pub async fn get_platform_info() -> Result<PlatformInfo, String> {
 pub async fn get_system_info() -> Result<crate::models::system::SystemInfo, String> {
     blocking(crate::services::system::collect).await
 }
+
+#[tauri::command]
+pub async fn get_cpu_static() -> Result<crate::models::cpu::CpuStaticInfo, String> {
+    blocking(crate::services::cpu::collect_static).await
+}
+
+#[tauri::command]
+pub async fn get_cpu_dynamic() -> Result<crate::models::cpu::CpuDynamicInfo, String> {
+    blocking(crate::services::cpu::collect_dynamic).await
+}
+
+#[tauri::command]
+pub async fn get_memory_info() -> Result<crate::models::memory::MemoryInfo, String> {
+    blocking(crate::services::memory::collect).await
+}
