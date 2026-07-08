@@ -110,7 +110,7 @@ jobs:
 
           const keyPath = path.join(process.env.RUNNER_TEMP, "tauri-updater.key");
           fs.writeFileSync(keyPath, key);
-          fs.appendFileSync(process.env.GITHUB_ENV, `TAURI_SIGNING_PRIVATE_KEY_PATH=${keyPath}\n`);
+          fs.appendFileSync(process.env.GITHUB_ENV, `TAURI_SIGNING_PRIVATE_KEY=${keyPath}\n`);
           NODE
 
       - name: Build and publish release
