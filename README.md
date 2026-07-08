@@ -16,8 +16,7 @@ The app uses the Tauri v2 updater and checks GitHub Releases at:
 
 `https://github.com/metesahankurt/CPU-M/releases/latest/download/latest.json`
 
-For release builds that generate updater artifacts, add these GitHub repository
-secrets:
+For fully automatic releases, add these GitHub repository secrets once:
 
 - `TAURI_SIGNING_PRIVATE_KEY`: the content of the private updater key, or a
   path on the runner if you manage the file yourself.
@@ -25,7 +24,10 @@ secrets:
   or the key password if you regenerate it with a password.
 
 The local private key generated during setup is stored at
-`~/.tauri/cpu-m-updater.key`; keep it secret. To publish an update, bump the app
-version, push a tag such as `v0.1.1`, and the `Release` workflow builds signed
-artifacts plus `latest.json`. Installed apps will detect the new release,
-download it, install it, and relaunch automatically.
+`~/.tauri/cpu-m-updater.key`; keep it secret. After the secrets are configured,
+each push to `master` or `main` automatically bumps the patch version, commits
+`chore(release): vX.Y.Z`, tags it, builds macOS and Windows bundles, uploads a
+GitHub Release, and attaches `latest.json`. Installed apps will detect the new
+release, download it, install it, and relaunch automatically.
+
+Manual tag releases are still supported through the `Release` workflow.

@@ -1,9 +1,12 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing release tag to build, for example v0.1.1"
+        required: true
+        type: string
 
 jobs:
   publish-tauri:
@@ -24,6 +27,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -51,8 +56,8 @@ jobs:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         with:
-          tagName: ${{ github.ref_name }}
-          releaseName: "CPU-M ${{ github.ref_name }}"
+          tagName: ${{ inputs.tag }}
+          releaseName: "CPU-M ${{ inputs.tag }}"
           releaseBody: "CPU-M desktop release. The updater metadata is attached as latest.json."
           releaseDraft: false
           prerelease: false

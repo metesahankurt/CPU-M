@@ -3,6 +3,7 @@ import { DashboardLayout } from "@/components/layout/dashboard-layout";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useAutoUpdater } from "@/hooks/use-auto-updater";
+import { useNativeAppGuards } from "@/hooks/use-native-app-guards";
 import { BatteryPage } from "@/pages/battery";
 import { CpuPage } from "@/pages/cpu";
 import { DisplaysPage } from "@/pages/displays";
@@ -22,6 +23,7 @@ import { ThemeProvider } from "@/providers/theme-provider";
 
 function App() {
   useAutoUpdater();
+  useNativeAppGuards();
 
   return (
     <ThemeProvider>

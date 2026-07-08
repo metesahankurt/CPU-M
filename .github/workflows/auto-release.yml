@@ -1,0 +1,102 @@
+name: Auto Release
+
+on:
+  push:
+    branches:
+      - master
+      - main
+  workflow_dispatch:
+
+jobs:
+  prepare:
+    name: Version and Tag
+    if: github.actor != 'github-actions[bot]' && (github.event_name == 'workflow_dispatch' || !startsWith(github.event.head_commit.message, 'chore(release):'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      tag: ${{ steps.version.outputs.tag }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Bump patch version
+        id: version
+        run: |
+          VERSION="$(node scripts/bump-version.mjs patch)"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Commit version bump
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json src-tauri/tauri.conf.json src-tauri/Cargo.toml src-tauri/Cargo.lock
+          git commit -m "chore(release): v${{ steps.version.outputs.version }}"
+          git tag "v${{ steps.version.outputs.version }}"
+          git push origin HEAD:${{ github.ref_name }}
+          git push origin "v${{ steps.version.outputs.version }}"
+
+  publish:
+    name: Build and Publish (${{ matrix.platform }})
+    needs: prepare
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: macos-latest
+            args: "--target aarch64-apple-darwin --config src-tauri/tauri.updater.conf.json"
+          - platform: macos-latest
+            args: "--target x86_64-apple-darwin --config src-tauri/tauri.updater.conf.json"
+          - platform: windows-latest
+            args: "--config src-tauri/tauri.updater.conf.json"
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Checkout release tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare.outputs.tag }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+
+      - name: Install frontend dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build and publish release
+        uses: tauri-apps/tauri-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        with:
+          tagName: ${{ needs.prepare.outputs.tag }}
+          releaseName: "CPU-M ${{ needs.prepare.outputs.tag }}"
+          releaseBody: "Automatic CPU-M release. Updater metadata is attached as latest.json."
+          releaseDraft: false
+          prerelease: false
+          updaterJsonPreferNsis: true
+          args: ${{ matrix.args }}
