@@ -23,11 +23,13 @@ export function DashboardLayout() {
   }, [platform, setPlatform]);
 
   return (
-    <SidebarProvider>
+    // The body never scrolls (globals.css), so the shell must be pinned to
+    // the viewport height for the <main> overflow scroll to activate.
+    <SidebarProvider className="h-svh max-h-svh">
       <AppSidebar />
-      <SidebarInset className="min-w-0 overflow-hidden">
+      <SidebarInset className="min-h-0 min-w-0 overflow-hidden">
         <AppHeader />
-        <main className="flex min-w-0 flex-1 flex-col gap-4 overflow-x-hidden overflow-y-auto overscroll-contain p-4 lg:p-6">
+        <main className="flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-x-hidden overflow-y-auto overscroll-contain p-4 lg:p-6">
           <Outlet />
         </main>
       </SidebarInset>
