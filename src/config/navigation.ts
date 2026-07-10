@@ -2,6 +2,7 @@ import {
   Battery,
   CircuitBoard,
   Cpu,
+  Download,
   FileText,
   HardDrive,
   LayoutDashboard,
@@ -9,6 +10,7 @@ import {
   Monitor,
   MonitorCog,
   Network,
+  PackageOpen,
   Settings,
   ShieldCheck,
   Thermometer,
@@ -21,6 +23,8 @@ export interface NavItem {
   key: string;
   path: string;
   icon: LucideIcon;
+  /** Only shown when the detected platform is Windows. */
+  windowsOnly?: boolean;
 }
 
 export interface NavGroup {
@@ -47,6 +51,18 @@ export const navGroups: NavGroup[] = [
       { key: "network", path: "/app/network", icon: Network },
       { key: "battery", path: "/app/battery", icon: Battery },
       { key: "mainboard", path: "/app/mainboard", icon: CircuitBoard },
+    ],
+  },
+  {
+    key: "groups.setup",
+    items: [
+      {
+        key: "drivers",
+        path: "/app/drivers",
+        icon: Download,
+        windowsOnly: true,
+      },
+      { key: "apps", path: "/app/apps", icon: PackageOpen },
     ],
   },
   {

@@ -86,6 +86,25 @@ pub async fn get_sensors_info() -> Result<crate::models::sensors::SensorsInfo, S
 }
 
 #[tauri::command]
+pub async fn get_package_manager_status(
+) -> Result<crate::models::apps::PackageManagerStatus, String> {
+    blocking(crate::services::apps::status).await
+}
+
+#[tauri::command]
+pub async fn get_installed_app_ids(ids: Vec<String>) -> Result<Vec<String>, String> {
+    blocking(move || crate::services::apps::installed_ids(&ids)).await
+}
+
+#[tauri::command]
+pub async fn install_app(
+    package_id: String,
+    source: Option<String>,
+) -> Result<crate::models::apps::AppInstallResult, String> {
+    blocking(move || crate::services::apps::install(&package_id, source.as_deref())).await
+}
+
+#[tauri::command]
 pub async fn generate_system_report(
     app: tauri::AppHandle,
     mask_sensitive: bool,

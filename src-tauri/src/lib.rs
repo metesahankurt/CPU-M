@@ -28,6 +28,9 @@ pub fn run() {
             commands::get_security_info,
             commands::get_license_info,
             commands::get_sensors_info,
+            commands::get_package_manager_status,
+            commands::get_installed_app_ids,
+            commands::install_app,
             commands::generate_system_report,
             commands::write_report_file
         ])

@@ -2,6 +2,7 @@ import { Cpu } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 import { navGroups, secondaryNavItems } from "@/config/navigation";
+import { usePlatformStore } from "@/stores/platform-store";
 import {
   Sidebar,
   SidebarContent,
@@ -50,6 +51,14 @@ function NavItems({ items }: { items: NavItem[] }) {
 
 export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
   const { t } = useTranslation("Navigation");
+  const platform = usePlatformStore((s) => s.platform);
+
+  // Platform-gated items (and any group left empty) disappear on other OSes.
+  const isVisible = (item: NavItem) =>
+    !item.windowsOnly || platform?.os === "windows";
+  const visibleGroups = navGroups
+    .map((group) => ({ ...group, items: group.items.filter(isVisible) }))
+    .filter((group) => group.items.length > 0);
 
   return (
     <Sidebar collapsible="icon" variant="inset" {...props}>
@@ -69,7 +78,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        {navGroups.map((group) => (
+        {visibleGroups.map((group) => (
           <SidebarGroup key={group.key}>
             <SidebarGroupLabel>{t(group.key)}</SidebarGroupLabel>
             <SidebarGroupContent>

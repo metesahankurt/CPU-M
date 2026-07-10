@@ -4,9 +4,11 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useAutoUpdater } from "@/hooks/use-auto-updater";
 import { useNativeAppGuards } from "@/hooks/use-native-app-guards";
+import { AppsPage } from "@/pages/apps";
 import { BatteryPage } from "@/pages/battery";
 import { CpuPage } from "@/pages/cpu";
 import { DisplaysPage } from "@/pages/displays";
+import { DriversPage } from "@/pages/drivers";
 import { GpuPage } from "@/pages/gpu";
 import { LicensePage } from "@/pages/license";
 import { MainboardPage } from "@/pages/mainboard";
@@ -45,6 +47,8 @@ function App() {
               <Route element={<NetworkPage />} path="network" />
               <Route element={<BatteryPage />} path="battery" />
               <Route element={<MainboardPage />} path="mainboard" />
+              <Route element={<DriversPage />} path="drivers" />
+              <Route element={<AppsPage />} path="apps" />
               <Route element={<SecurityPage />} path="security" />
               <Route element={<LicensePage />} path="license" />
               <Route element={<SensorsPage />} path="sensors" />
