@@ -1,6 +1,6 @@
 [package]
 name = "cpu-m"
-version = "0.1.6"
+version = "0.1.7"
 description = "Detailed system information for Windows and macOS"
 authors = ["Mede"]
 edition = "2021"
