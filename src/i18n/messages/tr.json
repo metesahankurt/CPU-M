@@ -192,8 +192,6 @@
     "statusAlready": "Zaten kurulu",
     "statusFailed": "Başarısız",
     "statusCancelled": "İptal edildi",
-    "toastDone": "{{ok}} kuruldu, {{failed}} başarısız",
-    "toastCancelled": "Kurulum iptal edildi",
     "noResults": "Aramanızla eşleşen uygulama yok.",
     "categories": {
       "browsers": "Tarayıcılar",
@@ -211,7 +209,18 @@
     "managerMissing": "{{name}} bulunamadı",
     "brewMissingHint": "Homebrew paket yöneticisi gereklidir. brew.sh üzerinden kurun, ardından CPU-M'i yeniden başlatın:",
     "brewInstall": "brew.sh'i Aç",
-    "unsupportedOs": "Uygulama Yükleyici yalnızca Windows ve macOS'ta kullanılabilir."
+    "unsupportedOs": "Uygulama Yükleyici yalnızca Windows ve macOS'ta kullanılabilir.",
+    "installTitle": "Uygulamalar kuruluyor",
+    "installDoneTitle": "Kurulum tamamlandı",
+    "installCancelledTitle": "Kurulum iptal edildi",
+    "currentlyInstalling": "{{name}} kuruluyor…",
+    "runningHint": "Kurulum bitene kadar bu pencere açık kalır.",
+    "doneSummary": "{{ok}} kuruldu, {{failed}} başarısız",
+    "close": "Kapat",
+    "summaryOk_one": "{{count}} kuruldu",
+    "summaryOk_other": "{{count}} kuruldu",
+    "summaryFailed_one": "{{count}} başarısız",
+    "summaryFailed_other": "{{count}} başarısız"
   },
   "Storage": {
     "physicalDisks": "Fiziksel Diskler",

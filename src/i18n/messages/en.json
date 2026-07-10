@@ -192,8 +192,6 @@
     "statusAlready": "Already installed",
     "statusFailed": "Failed",
     "statusCancelled": "Cancelled",
-    "toastDone": "{{ok}} installed, {{failed}} failed",
-    "toastCancelled": "Installation cancelled",
     "noResults": "No apps match your search.",
     "categories": {
       "browsers": "Browsers",
@@ -211,7 +209,18 @@
     "managerMissing": "{{name}} not found",
     "brewMissingHint": "The Homebrew package manager is required. Install it from brew.sh, then restart CPU-M:",
     "brewInstall": "Open brew.sh",
-    "unsupportedOs": "The App Installer is only available on Windows and macOS."
+    "unsupportedOs": "The App Installer is only available on Windows and macOS.",
+    "installTitle": "Installing apps",
+    "installDoneTitle": "Installation complete",
+    "installCancelledTitle": "Installation cancelled",
+    "currentlyInstalling": "Installing {{name}}…",
+    "runningHint": "This window stays open until the installation finishes.",
+    "doneSummary": "{{ok}} installed, {{failed}} failed",
+    "close": "Close",
+    "summaryOk_one": "{{count}} installed",
+    "summaryOk_other": "{{count}} installed",
+    "summaryFailed_one": "{{count}} failed",
+    "summaryFailed_other": "{{count}} failed"
   },
   "Storage": {
     "physicalDisks": "Physical Disks",

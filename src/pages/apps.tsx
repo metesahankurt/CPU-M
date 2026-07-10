@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
 import { Badge } from "@/components/shared/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,6 +23,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useInvoke } from "@/hooks/use-invoke";
 import { appCatalog, allCatalogApps } from "@/config/app-catalog";
@@ -43,6 +50,15 @@ interface InstallState {
   phase: InstallPhase;
   message?: string;
 }
+
+const PHASE_LABEL_KEYS: Record<InstallPhase, string> = {
+  queued: "statusQueued",
+  installing: "statusInstalling",
+  installed: "statusInstalled",
+  already: "statusAlready",
+  failed: "statusFailed",
+  cancelled: "statusCancelled",
+};
 
 /** The catalog id used by the current platform's package manager. */
 function packageIdFor(app: CatalogApp, os: string): string | undefined {
@@ -179,15 +195,9 @@ function CategoryCard({
                 </span>
                 <span
                   className="block truncate text-muted-foreground text-xs"
-                  title={
-                    state?.phase === "failed" && state.message
-                      ? state.message
-                      : app.description[lang]
-                  }
+                  title={app.description[lang]}
                 >
-                  {state?.phase === "failed" && state.message
-                    ? state.message
-                    : app.description[lang]}
+                  {app.description[lang]}
                 </span>
               </span>
               <StatusIcon state={state} />
@@ -196,6 +206,151 @@ function CategoryCard({
         })}
       </CardContent>
     </Card>
+  );
+}
+
+interface InstallDialogProps {
+  open: boolean;
+  running: boolean;
+  cancelled: boolean;
+  queue: CatalogApp[];
+  statuses: Record<string, InstallState>;
+  progress: { done: number; total: number };
+  onCancel: () => void;
+  onClose: () => void;
+}
+
+function InstallDialog({
+  open,
+  running,
+  cancelled,
+  queue,
+  statuses,
+  progress,
+  onCancel,
+  onClose,
+}: InstallDialogProps) {
+  const { t } = useTranslation("Apps");
+  const current = queue.find((a) => statuses[a.id]?.phase === "installing");
+  const okCount = queue.filter((a) =>
+    ["installed", "already"].includes(statuses[a.id]?.phase ?? ""),
+  ).length;
+  const failedCount = queue.filter(
+    (a) => statuses[a.id]?.phase === "failed",
+  ).length;
+  const percent =
+    progress.total > 0 ? (progress.done / progress.total) * 100 : 0;
+
+  const title = running
+    ? t("installTitle")
+    : cancelled
+      ? t("installCancelledTitle")
+      : t("installDoneTitle");
+
+  return (
+    <Dialog
+      onOpenChange={(next) => {
+        if (!next) {
+          if (running) {
+            return;
+          }
+          onClose();
+        }
+      }}
+      open={open}
+    >
+      <DialogContent className="sm:max-w-lg" showCloseButton={!running}>
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>
+            {running
+              ? current
+                ? t("currentlyInstalling", { name: current.name })
+                : t("runningHint")
+              : t("doneSummary", { ok: okCount, failed: failedCount })}
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-muted-foreground">
+              {t("installingProgress", {
+                done: progress.done,
+                total: progress.total,
+              })}
+            </span>
+            <span className="font-medium">{Math.round(percent)}%</span>
+          </div>
+          <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
+            <div
+              className="h-full rounded-full bg-primary transition-[width] duration-300"
+              style={{ width: `${percent.toFixed(1)}%` }}
+            />
+          </div>
+        </div>
+
+        <div className="max-h-64 divide-y divide-border/60 overflow-y-auto rounded-lg border">
+          {queue.map((app) => {
+            const state = statuses[app.id] ?? { phase: "queued" as const };
+            const isCurrent = state.phase === "installing";
+            return (
+              <div
+                className="flex items-center gap-3 px-3 py-2"
+                key={app.id}
+                ref={
+                  isCurrent
+                    ? (el) => el?.scrollIntoView({ block: "nearest" })
+                    : undefined
+                }
+              >
+                <StatusIcon state={state} />
+                <div className="min-w-0 flex-1">
+                  <p className="truncate font-medium text-sm">{app.name}</p>
+                  {state.phase === "failed" && state.message && (
+                    <p
+                      className="truncate text-destructive text-xs"
+                      title={state.message}
+                    >
+                      {state.message}
+                    </p>
+                  )}
+                </div>
+                <span className="shrink-0 text-muted-foreground text-xs">
+                  {t(PHASE_LABEL_KEYS[state.phase])}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+
+        <DialogFooter className="items-center">
+          {running ? (
+            <Button onClick={onCancel} size="sm" variant="outline">
+              <X className="size-4" />
+              {t("cancel")}
+            </Button>
+          ) : (
+            <>
+              <div className="flex flex-1 gap-1.5">
+                {okCount > 0 && (
+                  <Badge variant="success">
+                    {t("summaryOk", { count: okCount })}
+                  </Badge>
+                )}
+                {failedCount > 0 && (
+                  <Badge variant="destructive">
+                    {t("summaryFailed", { count: failedCount })}
+                  </Badge>
+                )}
+              </div>
+              <Button onClick={onClose} size="sm">
+                {t("close")}
+              </Button>
+            </>
+          )}
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -208,7 +363,10 @@ export function AppsPage() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [statuses, setStatuses] = useState<Record<string, InstallState>>({});
   const [installedIds, setInstalledIds] = useState<Set<string>>(new Set());
+  const [queue, setQueue] = useState<CatalogApp[]>([]);
+  const [modalOpen, setModalOpen] = useState(false);
   const [running, setRunning] = useState(false);
+  const [cancelled, setCancelled] = useState(false);
   const [progress, setProgress] = useState({ done: 0, total: 0 });
   const cancelRef = useRef(false);
 
@@ -219,13 +377,13 @@ export function AppsPage() {
     if (!supported) {
       return;
     }
-    let cancelled = false;
+    let stale = false;
     const ids = allCatalogApps
       .map((a) => packageIdFor(a, os))
       .filter((id): id is string => id !== undefined);
     invoke<string[]>("get_installed_app_ids", { ids })
       .then((installed) => {
-        if (!cancelled) {
+        if (!stale) {
           setInstalledIds(new Set(installed));
         }
       })
@@ -233,7 +391,7 @@ export function AppsPage() {
         // package manager listing failed; badges simply don't show
       });
     return () => {
-      cancelled = true;
+      stale = true;
     };
   }, [supported, os]);
 
@@ -297,22 +455,23 @@ export function AppsPage() {
   };
 
   const install = async () => {
-    const queue = allCatalogApps.filter(
+    const items = allCatalogApps.filter(
       (a) => selected.has(a.id) && packageIdFor(a, os) !== undefined,
     );
-    if (queue.length === 0) {
+    if (items.length === 0) {
       return;
     }
+    setQueue(items);
+    setModalOpen(true);
     setRunning(true);
+    setCancelled(false);
     cancelRef.current = false;
-    setProgress({ done: 0, total: queue.length });
+    setProgress({ done: 0, total: items.length });
     setStatuses(
-      Object.fromEntries(queue.map((a) => [a.id, { phase: "queued" as const }])),
+      Object.fromEntries(items.map((a) => [a.id, { phase: "queued" as const }])),
     );
 
-    let ok = 0;
-    let failed = 0;
-    for (const app of queue) {
+    for (const app of items) {
       if (cancelRef.current) {
         setStatuses((s) => ({ ...s, [app.id]: { phase: "cancelled" } }));
         continue;
@@ -328,7 +487,6 @@ export function AppsPage() {
           source: os === "windows" ? (app.source ?? null) : null,
         });
         if (result.status === "failed") {
-          failed += 1;
           setStatuses((s) => ({
             ...s,
             [app.id]: {
@@ -337,7 +495,6 @@ export function AppsPage() {
             },
           }));
         } else {
-          ok += 1;
           setStatuses((s) => ({
             ...s,
             [app.id]: {
@@ -348,7 +505,6 @@ export function AppsPage() {
           setInstalledIds((prev) => new Set(prev).add(packageId));
         }
       } catch (err) {
-        failed += 1;
         setStatuses((s) => ({
           ...s,
           [app.id]: { phase: "failed", message: String(err) },
@@ -359,12 +515,23 @@ export function AppsPage() {
 
     setRunning(false);
     if (cancelRef.current) {
-      toast.info(t("toastCancelled"));
-    } else if (failed > 0) {
-      toast.warning(t("toastDone", { ok, failed }));
-    } else {
-      toast.success(t("toastDone", { ok, failed }));
+      setCancelled(true);
     }
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    // Keep failed apps selected for a retry; drop everything that finished.
+    setSelected((prev) => {
+      const next = new Set<string>();
+      for (const id of prev) {
+        const phase = statuses[id]?.phase;
+        if (phase === undefined || phase === "failed" || phase === "cancelled") {
+          next.add(id);
+        }
+      }
+      return next;
+    });
   };
 
   const managerMissing = pm.data !== null && !pm.data.available;
@@ -407,50 +574,6 @@ export function AppsPage() {
               value={search}
             />
           </div>
-          <Badge variant="muted">
-            {t("selectedCount", { count: selected.size })}
-          </Badge>
-          {running ? (
-            <>
-              <Badge variant="muted">
-                {t("installingProgress", {
-                  done: progress.done,
-                  total: progress.total,
-                })}
-              </Badge>
-              <Button
-                onClick={() => {
-                  cancelRef.current = true;
-                }}
-                size="sm"
-                variant="outline"
-              >
-                <X className="size-4" />
-                {t("cancel")}
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button
-                disabled={selected.size === 0}
-                onClick={() => setSelected(new Set())}
-                size="sm"
-                variant="outline"
-              >
-                {t("clearSelection")}
-              </Button>
-              <Button
-                disabled={selected.size === 0 || managerMissing}
-                onClick={() => {
-                  void install();
-                }}
-                size="sm"
-              >
-                <Download className="size-4" />
-                {t("installSelected")}
-              </Button>
-            </>
-          )}
         </CardContent>
         {managerMissing && (
           <CardContent className="pt-0">
@@ -496,6 +619,46 @@ export function AppsPage() {
           ))}
         </div>
       )}
+
+      {selected.size > 0 && !running && (
+        <div className="sticky bottom-2 z-10 self-center">
+          <div className="flex flex-wrap items-center gap-3 rounded-xl border bg-background/95 py-2.5 pr-2.5 pl-4 shadow-lg backdrop-blur">
+            <span className="font-medium text-sm">
+              {t("selectedCount", { count: selected.size })}
+            </span>
+            <Button
+              onClick={() => setSelected(new Set())}
+              size="sm"
+              variant="outline"
+            >
+              {t("clearSelection")}
+            </Button>
+            <Button
+              disabled={managerMissing}
+              onClick={() => {
+                void install();
+              }}
+              size="sm"
+            >
+              <Download className="size-4" />
+              {t("installSelected")}
+            </Button>
+          </div>
+        </div>
+      )}
+
+      <InstallDialog
+        cancelled={cancelled}
+        onCancel={() => {
+          cancelRef.current = true;
+        }}
+        onClose={closeModal}
+        open={modalOpen}
+        progress={progress}
+        queue={queue}
+        running={running}
+        statuses={statuses}
+      />
     </div>
   );
 }
