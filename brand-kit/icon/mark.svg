@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="a69_fm" x1="0" y1="0" x2="0.3" y2="1"><stop offset="0" stop-color="#FAFAFA"/><stop offset="1" stop-color="#D4D4D8"/></linearGradient>
+    <filter id="a69_fsh" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="16"/></filter>
+  </defs>
+  
+  <g transform="translate(512 512) scale(1.18) translate(-512 -527)">
+  <path d="M372 638 V386 H446 L512 482 L578 386 H652 V638 H582 V510 L512 606 L442 510 V638 Z" fill="#000" opacity="0.5" filter="url(#a69_fsh)" transform="translate(10 20)"/>
+  <rect x="384" y="660" width="16" height="44" rx="5" fill="#8E8E96"/><rect x="414" y="660" width="16" height="44" rx="5" fill="#8E8E96"/><rect x="594" y="660" width="16" height="44" rx="5" fill="#8E8E96"/><rect x="624" y="660" width="16" height="44" rx="5" fill="#8E8E96"/>
+  <path d="M372 638 V386 H446 L512 482 L578 386 H652 V638 H582 V510 L512 606 L442 510 V638 Z" fill="url(#a69_fm)"/>
+  <circle cx="404" cy="420" r="13" fill="#F97316"/>
+  </g>
+</svg>
